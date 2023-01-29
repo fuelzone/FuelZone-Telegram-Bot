@@ -44,6 +44,7 @@
             <artifactId>telegrambots</artifactId>
             <version>6.1.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
