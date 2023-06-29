@@ -11,7 +11,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -45,17 +44,17 @@ public class MyBot extends TelegramLongPollingBot {
         if (update.hasCallbackQuery())
             System.out.println("Callback: " + update.getCallbackQuery().toString());
         String myChatId = "" + update.getMessage().getChatId().toString();
-        if(update.getMessage().hasText() && update.getMessage().getText().equals("/start")){
+        if (update.getMessage().hasText() && update.getMessage().getText().equals("/start")) {
             System.out.println("starting...");
             UserDto userDto = new UserDto();
             userDto.setChatId(myChatId);
-            if (update.getMessage().getFrom().getUserName() != null){
+            if (update.getMessage().getFrom().getUserName() != null) {
                 userDto.setUsername(update.getMessage().getFrom().getUserName());
             }
-            if (update.getMessage().getFrom().getFirstName() != null){
+            if (update.getMessage().getFrom().getFirstName() != null) {
                 userDto.setFirstName(update.getMessage().getFrom().getFirstName());
             }
-            if (update.getMessage().getFrom().getLastName() != null){
+            if (update.getMessage().getFrom().getLastName() != null) {
                 userDto.setLastName(update.getMessage().getFrom().getLastName());
             }
             try {
@@ -69,7 +68,7 @@ public class MyBot extends TelegramLongPollingBot {
             } catch (Exception e) {
                 System.out.println(e);
             }
-        }else if (update.getMessage().hasText() && update.getMessage().getText().equals("Back")){
+        } else if (update.getMessage().hasText() && update.getMessage().getText().equals("Back")) {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(myChatId);
             sendMessage.setText("Choose below!");
@@ -80,9 +79,9 @@ public class MyBot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
-        }else if(update.hasMessage() && condition.get(myChatId) == 1){
+        } else if (update.hasMessage() && condition.get(myChatId) == 1) {
             String data = update.getMessage().getText();
-            if (data.contains("Statistics")){
+            if (data.contains("Statistics")) {
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setText("Sending report here!");
                 sendMessage.setChatId(myChatId);
@@ -92,7 +91,7 @@ public class MyBot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     System.out.println(e);
                 }
-            }else if(data.contains("Fuel")){
+            } else if (data.contains("Fuel")) {
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setReplyMarkup(fuelMenu());
                 sendMessage.setText("Choose fuel type!");
@@ -104,30 +103,30 @@ public class MyBot extends TelegramLongPollingBot {
                     System.out.println(e);
                 }
             }
-        }else if (update.hasMessage() && condition.get(myChatId) == 2){
+        } else if (update.hasMessage() && condition.get(myChatId) == 2) {
             String data = update.getMessage().getText();
-            if (data.contains("i80")){
+            if (data.contains("i80")) {
                 fuelTypes.put(myChatId, "80");
                 try {
                     sendLocation(myChatId);
                 } catch (TelegramApiException e) {
                     System.out.println(e);
                 }
-            }else if(data.contains("i90")){
+            } else if (data.contains("i90")) {
                 fuelTypes.put(myChatId, "90");
                 try {
                     sendLocation(myChatId);
                 } catch (TelegramApiException e) {
                     System.out.println(e);
                 }
-            }else if(data.contains("i95")){
+            } else if (data.contains("i95")) {
                 fuelTypes.put(myChatId, "95");
                 try {
                     sendLocation(myChatId);
                 } catch (TelegramApiException e) {
                     System.out.println(e);
                 }
-            }else if (data.contains("Back")){
+            } else if (data.contains("Back")) {
                 SendMessage sendMessage = new SendMessage();
                 sendMessage.setChatId(myChatId);
                 sendMessage.setText("Choose below!");
@@ -139,7 +138,7 @@ public class MyBot extends TelegramLongPollingBot {
                     throw new RuntimeException(e);
                 }
             }
-        }else if (update.getMessage().hasLocation() && condition.get(myChatId) == 3) {
+        } else if (update.getMessage().hasLocation() && condition.get(myChatId) == 3) {
             System.out.println("Sending location!");
             SendMessage msg = new SendMessage();
             msg.setChatId(update.getMessage().getChatId());
@@ -163,7 +162,7 @@ public class MyBot extends TelegramLongPollingBot {
                     ResponseDto res = gson.fromJson(EntityUtils.toString(content), ResponseDto.class);
                     SendLocation sendLocation = new SendLocation();
                     sendLocation.setChatId(myChatId);
-                    if(res.isFound()) {
+                    if (res.isFound()) {
                         sendLocation.setLatitude(res.getLatitude());
                         sendLocation.setLongitude(res.getLongitude());
                         execute(sendLocation);
@@ -175,7 +174,7 @@ public class MyBot extends TelegramLongPollingBot {
                         sendMessage.setText("Station: " + res.getName() + "\nOpen time: " + openH + " - " + closeH + "\nLast updated: " + lastUpdated + "\nFuel type: " + res.getFuelType() + "\nFuel price: " + res.getPrice() + "\nAvailable: " + res.getAmount());
                         sendMessage.setReplyMarkup(backMenu());
                         execute(sendMessage);
-                    }else{
+                    } else {
                         SendMessage sendMessage = new SendMessage();
                         sendMessage.setChatId(myChatId);
                         sendMessage.setText(requestDto.getFuelType() + " fuel type is not available!");

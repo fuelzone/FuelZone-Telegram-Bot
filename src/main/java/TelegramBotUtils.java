@@ -1,4 +1,4 @@
 public interface TelegramBotUtils {
-    String USERNAME = "geofuelbot";
-    String TOKEN = "5819845685:AAFR1XTER82VzacKP3kXaktgSksf8upGYRg";
+    String USERNAME = "fuelzone_bot";
+    String TOKEN = "5833277808:AAFJzOSp__WXync248gNzu4LMhmOLMQ1J34";
 }
